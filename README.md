@@ -20,3 +20,4 @@ The next experiments were conducted with the reference speed of 63, which result
 Summarizing, after tuning the MPC at 60mph, the resulting model worked fine at 40mph. I’ve made two videos of both cases of the vehicle running around the track: 
 https://youtu.be/hJ75YNh0r2Q
 https://youtu.be/bNe7vG_9bNU
+Probably, it is possible to run faster than this by finetuning the parameters, considering the 100ms control latency.
