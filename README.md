@@ -11,10 +11,14 @@ The state of the vehicle is described with position (x,y), angle psi and velocit
 
 The model of vehicle movement contains four update equations:
 
-x[t+1] = x[t] + v*cos(psi)*dt,
-y[t+1] = y[t] + v*sin(psi)*dt,
-psi[t+1] = psi[t] - v*delta/Lf*dt,
-v[t+1] = v[t] + a*dt,
+x[t+1] = x[t] + v * cos(psi) * dt,
+
+y[t+1] = y[t] + v * sin(psi) * dt,
+
+psi[t+1] = psi[t] - v * delta / Lf * dt,
+
+v[t+1] = v[t] + a * dt,
+
 
 where Lf is the length from front to center of gravity of the vehicle.
 
@@ -35,12 +39,19 @@ The update equations should consider the initial x and y position as 0, as well 
 Changing the latency handling method influenced the behavior of the whole algorithm, so I had to tune the parameters once again. The maximum velocity that I was able to achieve was 70mph, with the following parameters:
 
 cte weight: 1,
+
 epsi weight: 40,
+
 v weight: 5,
+
 delta weight: 10,
+
 a weight: 10,
+
 sequential delta weight: 3000,
+
 sequential a weight: 1.
+
 Additionally, N was decreased to 8, as 10 resulted in too long predicted path at high velocity.
 
 The following two videos show the vehicle running at 40mph:
