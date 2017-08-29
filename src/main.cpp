@@ -102,12 +102,27 @@ int main() {
             ptsy_e(i) = -sin(psi)*(ptsx[i]-px) + cos(psi)*(ptsy[i]-py);
           }
 
+          double lat_x = 0;
+          double lat_y = 0;
+          double lat_psi = 0;
+          double lat_v = v;
+          double dt = 0.05; //also should be changed in MPC.cpp
+          const double Lf = 2.67;
+
+          for(unsigned int i = 0; i < 2; i++) { // 2 is because we have 2 steps of the model with dt=0.05
+            lat_x = lat_x + lat_v*cos(lat_psi)*dt;
+            lat_y = lat_y + lat_v*sin(lat_psi)*dt;
+            lat_psi = lat_psi - lat_v/Lf*mpc.prevDelta*dt;
+            lat_v = lat_v + mpc.prevA*dt;
+          }
+
           auto coeffs = polyfit(ptsx_e, ptsy_e, 3);
-          double cte = polyeval(coeffs, 0);
-          double epsi = -atan(coeffs[1]);
+          double cte = polyeval(coeffs, lat_x) - lat_y;
+          double epsi = -atan(coeffs[1] + coeffs[2] * lat_x + coeffs[3] * lat_x * lat_x);
 
           Eigen::VectorXd state(6);
-          state << 0, 0, 0, v, cte, epsi; //car coordinates - x,y,psi = 0
+          //state << 0, 0, 0, v, cte, epsi; //car coordinates - x,y,psi = 0
+          state << lat_x, lat_y, lat_psi, lat_v, cte, epsi; //car coordinates - x,y,psi = 0
 
           double steer_value;
           double throttle_value;
@@ -127,8 +142,11 @@ int main() {
             delta_vals.push_back(solution[N*2+i+1]);
             a_vals.push_back(solution[N*2+N-1+i+1]);
           }
-          steer_value = delta_vals[2]/0.436332;
-          throttle_value = a_vals[2];
+          steer_value = delta_vals[0]/0.436332;
+          throttle_value = a_vals[0];
+
+          mpc.prevDelta = delta_vals[0];
+          mpc.prevA = a_vals[0];
 
           json msgJson;
           // NOTE: Remember to divide by deg2rad(25) before you send the steering value back.
