@@ -22,6 +22,9 @@ class MPC {
   // Return the first actuatotions.
   vector<double> Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs);
   //CppAD::ipopt::solve_result<Dvector> Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs);
+
+  double prevDelta = 0;
+  double prevA = 0;
 };
 
 struct Solution
