@@ -41,6 +41,7 @@ delta weight: 10,
 a weight: 10,
 sequential delta weight: 3000,
 sequential a weight: 1.
+Additionally, N was decreased to 8, as 10 resulted in too long predicted path at high velocity.
 
 The following two videos show the vehicle running at 40mph:
 
